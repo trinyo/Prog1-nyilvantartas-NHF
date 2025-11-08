@@ -1,3 +1,6 @@
+#ifndef STRUKTURAK_H
+#define STRUKTURAK_H
+
 #define MAX_NEV_HOSSZ 50
 #define NEPTUN_HOSSZ 6
 #define MAX_ZH_SZAM 5 // Fixen 5 kis ZH
@@ -27,3 +30,4 @@ typedef struct {
   char csoportok[MAX_CSOPORT_SZAM][CSOPORT_KOD_HOSSZ + 1];
   int csoportok_szama; // Az aktuálisan tartott csoportok száma
 } Teacher;
+#endif

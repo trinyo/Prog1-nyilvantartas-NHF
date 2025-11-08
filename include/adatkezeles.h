@@ -1,3 +1,7 @@
+
+#ifndef ADATKEZELES_H
+#define ADATKEZELES_H
+
 #include "strukturak.h"
 
 // list all
@@ -79,3 +83,4 @@ int deleteStudent(Student *studentToRemove);
  * failed).
  */
 int deleteTeacher(Teacher *teacherToRemove);
+#endif
