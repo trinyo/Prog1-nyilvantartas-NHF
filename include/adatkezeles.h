@@ -4,15 +4,36 @@
 
 #include "strukturak.h"
 
+// main function for data handling
+void mainLoopForDataHandling(Student *studentList, Teacher *teacherList);
+
 // list all
-void listAllStudents();
-void listAllTeachers();
+/**
+ * @brief Lists all students from the linked list.
+ * @param theFirstElementOfTheList The head of the student list (Student*).
+ */
+void listAllStudents(Student *theFirstElementOfTheList);
+
+/**
+ * @brief Lists all teachers from the linked list.
+ * @param theFirstElementOfTheList The head of the teacher list (Teacher*).
+ */
+void listAllTeachers(Teacher *theFirstElementOfTheList);
 // list by zh or retake
 void listByRetake();
 // list by rank
 void listByPoints();
 void listByAbsence();
 void listByGroupAvgPoints();
+
+// create a new student instance
+Student *createNewStudentInstance(char nev, char neptun_kod, int elo_csoport,
+                                  char gyak_csoport[10], int hianyzasok_szama,
+                                  double kis_zh_pontok[MAX_ZH_SZAM],
+                                  double nzh_pont, double vizsga_pont);
+// create a new teacher instance
+Teacher *createNewTeacherInstance(char nev, char csoportok, int csoportok_szama,
+                                  Student *next, Student *previous);
 
 // create functions
 /**
