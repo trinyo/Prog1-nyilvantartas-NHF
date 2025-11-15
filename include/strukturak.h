@@ -4,8 +4,9 @@
 #define MAX_NEV_HOSSZ 50
 #define NEPTUN_HOSSZ 6
 #define MAX_ZH_SZAM 5 // Fixen 5 kis ZH
+#define MAX_SOR_HOSSZ 256
 
-typedef struct {
+typedef struct Student {
   // --- Személyes és Csoport Adatok ---
   char nev[MAX_NEV_HOSSZ + 1];       // Hallgató neve
   char neptun_kod[NEPTUN_HOSSZ + 1]; // Neptun kód (6 karakter + lezáró \0)
@@ -17,17 +18,19 @@ typedef struct {
   double kis_zh_pontok[MAX_ZH_SZAM]; // 5 db kis ZH pontszám
   double nzh_pont;                   // Nagy ZH pontszám
   double vizsga_pont;                // Vizsgapont
+  struct Student *next;
 } Student;
 
 #define MAX_OKTATO_NEV 50
 #define MAX_CSOPORT_SZAM 10 // Fixen max 10 csoportot tarthat egy oktató
 #define CSOPORT_KOD_HOSSZ 9 // Pl. "G01" vagy "L07"
 
-typedef struct {
+typedef struct Teacher {
   char nev[MAX_OKTATO_NEV + 1]; // Oktató neve
 
   // Mely csoportokat tartja
   char csoportok[MAX_CSOPORT_SZAM][CSOPORT_KOD_HOSSZ + 1];
   int csoportok_szama; // Az aktuálisan tartott csoportok száma
+  struct Teacher *next;
 } Teacher;
 #endif
