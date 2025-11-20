@@ -30,7 +30,6 @@ void displayListMenu() {
 
   printf("\n--- SZŰRÉS ÉS PÓTLÁS ---\n");
   printf("[21] PZH-ra kötelezett hallgatók listája (Pót-ZH)\n");
-  printf("[22] Pótlásra kötelezett hallgatók listája (Nagy házi, labor)\n");
 
   printf("\n--- RANGSOROLÁS ÉS STATISZTIKA ---\n");
   printf(
