@@ -4,9 +4,12 @@
 
 #include "strukturak.h"
 
+void saveStudentListToFile(Student *studentList);
+void saveTeacherListToFile(Student *studentList);
 // main function for data handling
-void mainLoopForDataHandling(Student *studentList, Teacher *teacherList);
-
+void mainLoopForListMenu(Student *studentList, Teacher *teacherList);
+void mainLoopForCreateMenu(Student *studentList, Teacher *teacherList);
+void mainLoopForUpdateMenu(Student *studentList, Teacher *teacherList);
 // list all
 /**
  * @brief Lists all students from the linked list.
@@ -19,21 +22,23 @@ void listAllStudents(Student *theFirstElementOfTheList);
  * @param theFirstElementOfTheList The head of the teacher list (Teacher*).
  */
 void listAllTeachers(Teacher *theFirstElementOfTheList);
-// list by zh or retake
-void listByRetake();
+void listAllStudentsByGroup(Student *theFirstElementOfTheList);
+// list by zh or *retake
+void listAllStudentsByRetake(Student *theFirstElementOfTheList);
 // list by rank
-void listByPoints();
-void listByAbsence();
-void listByGroupAvgPoints();
+void listAllStudentsByPointsDescending(Student *theFirstElementOfTheList);
+void listByAbsence(Student *theFirstElementOfTheList);
+void listByGroupAvgPoints(Student *theFirstElementOfTheList);
 
+
+Student* readNewStudentData();
+
+void mainLoopForAddNewStudent(Student* studentToAdd);
+void mainLoopForAddNewTeacher(Teacher* teacherToADd);
 // create a new student instance
-Student *createNewStudentInstance(char nev, char neptun_kod, int elo_csoport,
-                                  char gyak_csoport[10], int hianyzasok_szama,
-                                  double kis_zh_pontok[MAX_ZH_SZAM],
-                                  double nzh_pont, double vizsga_pont);
+Student *createNewStudentInstance(Student*newStudent);
 // create a new teacher instance
-Teacher *createNewTeacherInstance(char nev, char csoportok, int csoportok_szama,
-                                  Student *next, Student *previous);
+Teacher *createNewTeacherInstance(Teacher *newTeacher);
 
 // create functions
 /**
@@ -44,9 +49,9 @@ Teacher *createNewTeacherInstance(char nev, char csoportok, int csoportok_szama,
  * @return int 0 if successful, -1 if unsuccessful (e.g., memory allocation
  * failed).
  */
-int createNewStudent(Student newStudent);
+Student* addNewStudent(Student *studentList,Student *newStudent);
 /**
- * @brief Adds a new teacher record to the list.
+ * @brief Adds a new teacher record to the list.*
  * * Dynamically allocates memory for the new teacher.
  *
  * @param newTeacher* The data of the new teacher, already stored in a
@@ -54,7 +59,7 @@ int createNewStudent(Student newStudent);
  * @return int 0 if successful, -1 if unsuccessful (e.g., memory allocation
  * failed).
  */
-int createNewTeacher(Teacher newTeacher);
+Teacher *addNewTeacher(Teacher *studentList,Teacher *newTeacher);
 
 // update functions
 
@@ -68,7 +73,7 @@ int createNewTeacher(Teacher newTeacher);
  * @return int 0 if successful, -1 if unsuccessful (e.g., memory allocation
  * failed).
  */
-int updateStudent(Student *oldStudent, Student updateStudentWith);
+int updateStudent(Student *studentList);
 
 /**
  * @brief Updates the teacher  record pointed by the
@@ -80,7 +85,7 @@ int updateStudent(Student *oldStudent, Student updateStudentWith);
  * @return int 0 if successful, -1 if unsuccessful (e.g., memory allocation
  * failed).
  */
-int updateTeacher(Teacher *oldTeacher, Teacher updateTeacherWith);
+int updateTeacher(Teacher *teacherList);
 
 // delete functions
 

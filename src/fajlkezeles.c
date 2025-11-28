@@ -1,9 +1,12 @@
 #include "../include/menuElemek.h"
 #include "../include/strukturak.h"
-#include "debugmalloc.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#define STUDENT_FILE_PATH "./data/students.csv"
+#define TEACHER_FILE_PATH "./data/teachers.csv"
 
 Student *readStudentFileAndCreateStudentList() {
 
@@ -105,6 +108,18 @@ Student *readStudentFileAndCreateStudentList() {
 
   return previousStudent;
 }
+void trimNewline(char *str) {
+    if (str == NULL) return;
+    size_t len = strlen(str);
+    if (len > 0 && (str[len - 1] == '\n' || str[len - 1] == '\r')) {
+        str[len - 1] = '\0';
+        len--;
+    }
+    if (len > 0 && (str[len - 1] == '\n' || str[len - 1] == '\r')) {
+        str[len - 1] = '\0';
+    }
+}
+
 Teacher *readTeacherFileAndCreateTeacherList() {
 
   // read teachers file
@@ -152,6 +167,9 @@ Teacher *readTeacherFileAndCreateTeacherList() {
 
     while (pointerForReadingALineThenUsedForTokenizing != NULL &&
            counterForDataIndex <= 10) {
+
+      trimNewline(pointerForReadingALineThenUsedForTokenizing);
+
       switch (counterForDataIndex) {
       case 0: // Nev
         strncpy(newTeacher->nev, pointerForReadingALineThenUsedForTokenizing,
@@ -192,7 +210,6 @@ Teacher *readTeacherFileAndCreateTeacherList() {
 
   return previousTeacher;
 }
-
 // free functions
 void freeStudentsLinkedList(Student *theFirstElementOfTheList) {
   Student *nextNode;
@@ -213,3 +230,71 @@ void freeTeachersLinkedList(Teacher *theFirstElementOfTheList) {
   }
 }
 //////////////////////////////////////////
+void saveStudentsToFile(Student *head) {
+    FILE *file = fopen(STUDENT_FILE_PATH, "w");
+    if (file == NULL) {
+        perror("HIBA: Nem sikerült megnyitni a diákfájlt mentéshez!");
+        return;
+    }
+
+    fprintf(file, "Nev;Neptun_kod;Eloadas_csoport;Gyakorlati_csoport;Hianyzasok;ZH1;ZH2;ZH3;ZH4;ZH5;NZH_pont;Vizsga_pont\n");
+
+    Student *current = head;
+    while (current != NULL) {
+        fprintf(file, "%s;%s;%d;%s;%d;",
+                current->nev,
+                current->neptun_kod,
+                current->elo_csoport,
+                current->gyak_csoport,
+                current->hianyzasok_szama);
+
+        for (int i = 0; i < MAX_ZH_SZAM; i++) {
+            fprintf(file, "%.2f;", current->kis_zh_pontok[i]);
+        }
+
+        fprintf(file, "%.2f;%.2f\n",
+                current->nzh_pont,
+                current->vizsga_pont);
+
+        current = current->next;
+    }
+
+    fclose(file);
+    printf("SIKER: Diák adatok mentve ide: %s\n", STUDENT_FILE_PATH);
+}
+
+void saveTeachersToFile(Teacher *head) {
+    FILE *file = fopen(TEACHER_FILE_PATH, "w");
+    if (file == NULL) {
+        perror("HIBA: Nem sikerült megnyitni az oktatófájlt mentéshez!");
+        return;
+    }
+
+    fprintf(file, "Nev;Csoport1;Csoport2;Csoport3;Csoport4;Csoport5;Csoport6;Csoport7;Csoport8;Csoport9;Csoport10\n");
+
+    Teacher *current = head;
+    while (current != NULL) {
+        // Név
+        fprintf(file, "%s", current->nev);
+
+        // Csoportok
+        for (int i = 0; i < MAX_CSOPORT_SZAM; i++) {
+            fprintf(file, ";");
+            if (i < current->csoportok_szama) {
+                fprintf(file, "%s", current->csoportok[i]);
+            }
+        }
+        fprintf(file, "\n");
+        current = current->next;
+    }
+
+    fclose(file);
+    printf("SIKER: Oktató adatok mentve ide: %s\n", TEACHER_FILE_PATH);
+}
+
+void saveAllData(Student *studentHead, Teacher *teacherHead) {
+    printf("\n--- ADATOK MENTÉSE FÁJLBA ---\n");
+    saveStudentsToFile(studentHead);
+    saveTeachersToFile(teacherHead);
+    printf("--- MENTÉS BEFEJEZVE ---\n");
+}

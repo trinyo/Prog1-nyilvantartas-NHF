@@ -36,5 +36,30 @@ void mainFileHandlingFunction();
 /**
  * @brief Saves the list in to text format in the data directory.
  */
-void writeToFiles();
+
+/**
+ * @brief Saves the content of the Student linked list to a CSV file.
+ * * The function opens the file specified by STUDENT_FILE_PATH in write mode ('w'),
+ * prints the header, and then iterates through the linked list, writing each
+ * student's data as a semicolon-separated line.
+ * * @param head A pointer to the head of the Student linked list.
+ */
+void saveStudentsToFile(Student *head);
+
+/**
+ * @brief Saves the content of the Teacher linked list to a CSV file.
+ * * The function opens the file specified by TEACHER_FILE_PATH in write mode ('w'),
+ * prints the header, and iterates through the linked list, writing each
+ * teacher's data (name and up to MAX_CSOPORT_SZAM groups) as a semicolon-separated line.
+ * * @param head A pointer to the head of the Teacher linked list.
+ */
+void saveTeachersToFile(Teacher *head);
+
+/**
+ * @brief Wrapper function to save all data (Students and Teachers) to their respective files.
+ * * This function calls saveStudentsToFile and saveTeachersToFile.
+ * * @param studentHead A pointer to the head of the Student linked list.
+ * @param teacherHead A pointer to the head of the Teacher linked list.
+ */
+void saveAllData(Student *studentHead, Teacher *teacherHead);
 #endif

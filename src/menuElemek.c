@@ -58,6 +58,26 @@ void displayNewDataMenu() {
   printf("Adja meg a választott számot: ");
 }
 
+void displayDataManagementMenu() {
+  printf("\n==========================================\n");
+  printf("|        ADATKEZELÉSI MENÜ              |\n");
+  printf("==========================================\n\n");
+
+  printf("Milyen típusú műveletet szeretne végrehajtani?\n\n");
+
+  printf("--- FRISSÍTÉS ---\n");
+  printf("[1]   HALLGATÓ adatainak frissítése\n");
+  printf("[2]   OKTATÓ adatainak frissítése\n\n");
+
+  printf("--- TÖRLÉS ---\n");
+  printf("[3]   HALLGATÓ törlése a listából\n");
+  printf("[4]   OKTATÓ törlése a listából\n");
+  printf("------------------------------------------\n");
+
+  printf("[9]  Vissza a főmenübe\n\n");
+
+  printf("Adja meg a választott számot: ");
+}
 void clear_screen() {
 #ifdef _WIN32
   system("cls");
