@@ -181,7 +181,7 @@ Student *createNewStudentInstance(Student *newStudent) {
         "Adat bevitele után nyomjon Entert. A bevitelt a sor elején lévő Ctrl+D (vagy Ctrl+Z) gombokkal fejezheti be.\n\n");
     int result = scanf(
         // 1. Nev, Neptun_kod (Strings with semicolon delimiter)
-        "%50[^;];%6[^;];"
+        " %50[^;];%6[^;];"
 
         // 2. Eloadas_csoport, Gyakorlati_csoport (Integer and String)
         "%d;%9[^;];"
@@ -265,7 +265,7 @@ Teacher *createNewTeacherInstance(Teacher *newTeacher) {
 
 
     int result = scanf(
-        "%50[^;];"
+        " %50[^;];"
 
         "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];"
         "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]",
@@ -377,12 +377,10 @@ int updateStudent(Student *studentListPtr) {
     Student *selectedStudent = NULL;
     Student *current = studentListPtr;
 
-    printf("DEBUG: Kereses megkezdve a(z) %d. indexu diakhoz.\n", indexOfStudentToUpdate);
 
     for (int i = 0; current != NULL; i++) {
         if (i == indexOfStudentToUpdate) {
             selectedStudent = current;
-            printf("DEBUG: Diak megtalalva a(z) %d. indexen.\n", i);
             break;
         }
         current = current->next;
@@ -492,12 +490,10 @@ int updateTeacher(Teacher *teacherListPtr) {
     Teacher *selectedTeacher = NULL;
     Teacher *current = teacherListPtr;
 
-    printf("DEBUG: Kereses megkezdve a(z) %d. indexu oktatohoz.\n", indexOfTeacherToUpdate);
 
     for (int i = 0; current != NULL; i++) {
         if (i == indexOfTeacherToUpdate) {
             selectedTeacher = current;
-            printf("DEBUG: Oktato megtalalva a(z) %d. indexen.\n", i);
             break;
         }
         current = current->next;
@@ -546,11 +542,9 @@ int updateTeacher(Teacher *teacherListPtr) {
         printf("Csoport %d: ", i);
         if (fgets(selectedTeacher->csoportok[i], CSOPORT_KOD_HOSSZ + 1, stdin) == NULL) {
             perror("HIBA: Csoportkod beolvasasi hiba!");
-            // Puffer ürítése
             while (getchar() != '\n');
             return -2;
         }
-        // Eltávolítjuk a sorvégi karaktert
         selectedTeacher->csoportok[i][strcspn(selectedTeacher->csoportok[i], "\n")] = 0;
     }
 
