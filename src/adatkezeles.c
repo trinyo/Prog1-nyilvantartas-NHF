@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 
-#include "../include/fajlkezeles.h"
 #include "../include/menuElemek.h"
 #include "../include/strukturak.h"
 

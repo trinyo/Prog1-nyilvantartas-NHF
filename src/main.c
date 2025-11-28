@@ -9,9 +9,6 @@
 #include "../include/strukturak.h"
 #include "debugmalloc.h"
 
-#ifdef _WIN32
-    system( "chcp 65001 >nul" );    // UTF-8
-#endif
 
 int main(int argc, char *argv[]) {
   int userInput;
