@@ -81,7 +81,6 @@ void displayDataManagementMenu() {
 }
 void clear_screen() {
 #ifdef _WIN32
-  system( "chcp 65001 >nul" );
   system("cls");
 #else
   system("clear");

@@ -9,17 +9,20 @@
 #include "../include/strukturak.h"
 #include "debugmalloc.h"
 
+#ifdef _WIN32
+  system( "chcp 65001 >nul" );
+#endif
 
 int main(int argc, char *argv[]) {
   int userInput;
   Student *studentsList = readStudentFileAndCreateStudentList();
   if (studentsList == NULL) {
-   printf("Warning: Student data could not be loaded. Starting with an empty list.\n");
+    printf("Warning: Student data could not be loaded. Starting with an empty list.\n");
     waitForEnter();
   }
   Teacher *teacherList = readTeacherFileAndCreateTeacherList();
   if (teacherList == NULL) {
-  printf("Warning: Teacher data could not be loaded. Starting with an empty list.\n");
+    printf("Warning: Teacher data could not be loaded. Starting with an empty list.\n");
     waitForEnter();
   }
   do {
@@ -29,25 +32,26 @@ int main(int argc, char *argv[]) {
     switch (userInput) {
       case 0:
         break;
-      // list menu
+        // list menu
       case 1:
         mainLoopForListMenu(studentsList, teacherList);
         break;
-      // add new data
+        // add new data
       case 2:
         clear_screen();
-        mainLoopForCreateMenu(studentsList, teacherList);
+        mainLoopForCreateMenu(&studentsList, &teacherList);
         break;
-      // update data or remove
+        // update data or remove
       case 3:
         clear_screen();
-        mainLoopForUpdateMenu(studentsList, teacherList);
+        mainLoopForUpdateMenu(&studentsList, &teacherList);
         break;
       default:
         printf("Nem volt megfelelő a bemenet! \n");
         waitForEnter();
     }
   } while (userInput != 0);
+
   saveAllData(studentsList, teacherList);
   freeStudentsLinkedList(studentsList);
   freeTeachersLinkedList(teacherList);

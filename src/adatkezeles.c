@@ -1,28 +1,22 @@
 #include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-
-
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/adatkezeles.h"
 #include "../include/strukturak.h"
 #include "../include/menuElemek.h"
 
-// sum-er func
+
+
 double calculateTotalScore(const Student *student_ptr) {
     double total = 0.0;
-    // Sums up the points from the small tests (kis zh)
     for (int i = 0; i < MAX_ZH_SZAM; i++) {
         total += student_ptr->kis_zh_pontok[i];
     }
-    // Adds the mid-term score (nzh)
     total += student_ptr->nzh_pont;
-    // Adds the final exam score (vizsga)
     total += student_ptr->vizsga_pont;
     return total;
 }
-
 
 void calculateGrade(double totalScore, char *result) {
     if (totalScore >= 119.0) {
@@ -38,9 +32,11 @@ void calculateGrade(double totalScore, char *result) {
     }
 }
 
+
+
 void listAllStudents(Student *head) {
     if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "A hallgatói lista üres!\n");
         waitForEnter();
         return;
     }
@@ -51,12 +47,10 @@ void listAllStudents(Student *head) {
     int index = 0;
 
     printf("\n--- Hallgatók minimalizált listája ---\n");
-
     printf("| Index | Név (20)             | Neptun | Összpont | Értékelés    |\n");
     printf("----------------------------------------------------------\n");
 
     Student *current = head;
-
     while (current != NULL) {
         totalScore = calculateTotalScore(current);
         calculateGrade(totalScore, gradeStr);
@@ -71,14 +65,13 @@ void listAllStudents(Student *head) {
         current = current->next;
         index++;
     }
-
     printf("----------------------------------------------------------\n");
     waitForEnter();
 }
 
 void listAllTeachers(Teacher *head) {
     if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "Az oktatói lista üres!\n");
         waitForEnter();
         return;
     }
@@ -87,13 +80,10 @@ void listAllTeachers(Teacher *head) {
     int index = 0;
 
     printf("\n--- OKTATÓI NYILVÁNTARTÁS ---\n");
-
     printf("| Index | %-30s | %-10s | Csoportok Listája\n", "Név", "Csoport Sz.");
-
     printf("---------------------------------------------------------------------------------\n");
 
     Teacher *current = head;
-
     while (current != NULL) {
         printf("| %-5d | %-30s | %-10d | ",
                index,
@@ -103,7 +93,6 @@ void listAllTeachers(Teacher *head) {
         if (current->csoportok_szama > 0) {
             for (int i = 0; i < current->csoportok_szama; i++) {
                 printf("%s", current->csoportok[i]);
-
                 if (i < current->csoportok_szama - 1) {
                     printf(", ");
                 }
@@ -111,39 +100,31 @@ void listAllTeachers(Teacher *head) {
         } else {
             printf("Nincs hozzárendelt csoport");
         }
-
         printf("\n");
-
         current = current->next;
         index++;
     }
-
     printf("---------------------------------------------------------------------------------\n");
     waitForEnter();
 }
 
 void listAllStudentsByGroup(Student *head) {
     if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "A lista üres!\n");
         waitForEnter();
         return;
     }
-
+    clear_screen();
     printf("\n--- TANULÓ NYILVÁNTARTÁS CSOPORT ALAPJÁN ---\n");
-
-    printf("| %-30s | %-10s | Csoportok Listája\n", "Név", "Csoport Sz.");
-    printf("---------------------------------------------------------------------"
-        "---\n");
+    printf("| %-30s | %-10s | Gyak. Csoport\n", "Név", "Előadás Cs.");
+    printf("----------------------------------------------------------------------\n");
 
     Student *current = head;
-
     while (current != NULL) {
-        printf("| %-30s | %-30i | %-s \n", current->nev, current->elo_csoport,
+        printf("| %-30s | %-10i | %-s \n", current->nev, current->elo_csoport,
                current->gyak_csoport);
-
         current = current->next;
     }
-
     printf("--------------------------------------------------\n");
     waitForEnter();
 }
@@ -151,44 +132,38 @@ void listAllStudentsByGroup(Student *head) {
 
 void listAllStudentsByNZH(Student *head) {
     if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "A lista üres!\n");
+        waitForEnter();
         return;
     }
-
+    clear_screen();
     printf("\n--- TANULÓ NYILVÁNTARTÁS NZH ALAPJÁN ---\n");
-
-    printf("| %-30s | %-10s | \n", "Név", "NZH Pontszám");
-    printf("---------------------------------------------------------------------"
-        "---\n");
+    printf("| %-30s | %-10s |\n", "Név", "NZH Pontszám");
+    printf("--------------------------------------------\n");
 
     Student *current = head;
-
     while (current != NULL) {
-        printf("| %-30s | %-30f \n", current->nev, current->nzh_pont);
-
+        printf("| %-30s | %-10.2f |\n", current->nev, current->nzh_pont);
         current = current->next;
     }
-
     printf("--------------------------------------------------\n");
     waitForEnter();
 }
 
 void listAllStudentsByKZH(Student *head) {
     if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "A lista üres!\n");
+        waitForEnter();
         return;
     }
-
+    clear_screen();
     printf("\n--- TANULÓ NYILVÁNTARTÁS KZH ALAPJÁN ---\n");
-
-    printf("| %-30s | %-50s | \n", "Név", "KZH Pontszámok");
-    printf("---------------------------------------------------------------------"
-        "---\n");
+    printf("| %-30s | KZH1     | KZH2     | KZH3     | KZH4     | KZH5     |\n", "Név");
+    printf("------------------------------------------------------------------\n");
 
     Student *current = head;
-
     while (current != NULL) {
-        printf("| %-30s | %-10f | %-10f | %-10f | %-10f | %-10f \n",
+        printf("| %-30s | %-8.2f | %-8.2f | %-8.2f | %-8.2f | %-8.2f |\n",
             current->nev,
             current->kis_zh_pontok[0],
             current->kis_zh_pontok[1],
@@ -197,73 +172,66 @@ void listAllStudentsByKZH(Student *head) {
             current->kis_zh_pontok[4]);
         current = current->next;
     }
-
-    printf("--------------------------------------------------\n");
+    printf("------------------------------------------------------------------\n");
     waitForEnter();
 }
-
 
 void listAllStudentsByNEPTUN(Student *head) {
     if (head == NULL) {
-        perror("The list is empty!");
-        waitForEnter();
-        return;
-    }
-
-    printf("\n--- TANULÓ NYILVÁNTARTÁS NEPTUN KÓD ALAPJÁN ---\n");
-
-    printf("| %-30s | %-50s | \n", "Név", "NEPTUN Kód");
-    printf("---------------------------------------------------------------------"
-        "---\n");
-
-    Student *current = head;
-
-    while (current != NULL) {
-        printf("| %-30s | %-10s \n",
-            current->nev,
-            current->neptun_kod);
-        current = current->next;
-    }
-
-    printf("--------------------------------------------------\n");
-    waitForEnter();
-}
-
-
-void listAllStudentsByRetake(Student *head) {
-    if (head == NULL) {
-        perror("The list is empty!");
+        fprintf(stderr, "A lista üres!\n");
         waitForEnter();
         return;
     }
     clear_screen();
-    printf("\n--- TANULÓ NYILVÁNTARTÁS PZH ALAPJÁN ---\n");
-
-    printf("| %-30s | %-10s \n", "Név", "Elért pontszám");
-    printf("---------------------------------------------------------------------"
-        "---\n");
+    printf("\n--- TANULÓ NYILVÁNTARTÁS NEPTUN KÓD ALAPJÁN ---\n");
+    printf("| %-30s | %-10s |\n", "Név", "NEPTUN Kód");
+    printf("--------------------------------------------\n");
 
     Student *current = head;
-
     while (current != NULL) {
-        if (current->nzh_pont < 25) {
-            printf("| %-30s | %-30i \n", current->nev, (int) current->nzh_pont);
+        printf("| %-30s | %-10s |\n",
+            current->nev,
+            current->neptun_kod);
+        current = current->next;
+    }
+    printf("--------------------------------------------\n");
+    waitForEnter();
+}
+
+void listAllStudentsByRetake(Student *head) {
+    if (head == NULL) {
+        fprintf(stderr, "A lista üres!\n");
+        waitForEnter();
+        return;
+    }
+    clear_screen();
+    printf("\n--- PZH-ra KÖTELEZETT HALLGATÓK (NZH < 25) ---\n");
+    printf("| %-30s | %-10s |\n", "Név", "NZH Pontszám");
+    printf("--------------------------------------------\n");
+
+    Student *current = head;
+    while (current != NULL) {
+        if (current->nzh_pont < 25.0) {
+            printf("| %-30s | %-10.2f |\n", current->nev, current->nzh_pont);
         }
         current = current->next;
     }
-
-    printf("--------------------------------------------------\n");
+    printf("--------------------------------------------\n");
     waitForEnter();
 }
 
 
+
 Student *createNewStudentInstance(Student *newStudent) {
     printf("Kérjük, adja meg a hallgató adatait egy sorban, pontosvesszővel (;) elválasztva. \n");
-    printf("A bevitelt a következő formátumban várjuk:\n");
     printf(
         "Format: Nev;Neptun_kod;Eloadas_csoport;Gyakorlati_csoport;Hianyzasok;ZH1;ZH2;ZH3;ZH4;ZH5;NZH_pont;Vizsga_pont\n");
     printf(
         "Adat bevitele után nyomjon Entert. A bevitelt a sor elején lévő Ctrl+D (vagy Ctrl+Z) gombokkal fejezheti be.\n\n");
+
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
     int result = scanf(
         // 1. Nev, Neptun_kod (Strings with semicolon delimiter)
         " %50[^;];%6[^;];"
@@ -295,17 +263,17 @@ Student *createNewStudentInstance(Student *newStudent) {
         &newStudent->vizsga_pont
     );
 
-    const int expected_items = 12; // 2 strings, 1 int, 1 string, 1 int, 7 doubles = 12 items
+    const int expected_items = 12;
 
     if (result == EOF) {
         return NULL;
     }
 
+    while ((c = getchar()) != '\n' && c != EOF);
+
     if (result != expected_items) {
-        // Handle malformed line or read error
-        fprintf(stderr, "Error: Only read %d out of %d expected items. Check your input format.\n", result,
+        fprintf(stderr, "Hiba: Csak %d adatot sikerült beolvasni a %d-ből. Ellenőrizze a formátumot.\n", result,
                 expected_items);
-        waitForEnter();
         return NULL;
     }
     return newStudent;
@@ -313,25 +281,22 @@ Student *createNewStudentInstance(Student *newStudent) {
 
 Student *addNewStudent(Student *studentList, Student *newStudent) {
     if (newStudent == NULL) {
-        return studentList; // Failure, return original list head
+        return studentList;
     }
-    newStudent->next = NULL; // Ensure the new node is the tail
+    newStudent->next = NULL;
 
-    // Case 1: List is empty
     if (studentList == NULL) {
-        return newStudent; // newStudent becomes the new head
+        return newStudent;
     }
 
-    // Case 2: Find the last element
     Student *current = studentList;
     while (current->next != NULL) {
         current = current->next;
     }
 
-    // Add the new student to the end
     current->next = newStudent;
 
-    return studentList; // Return the original head
+    return studentList;
 }
 
 Teacher *createNewTeacherInstance(Teacher *newTeacher) {
@@ -342,16 +307,13 @@ Teacher *createNewTeacherInstance(Teacher *newTeacher) {
     printf("Kérjük, adja meg az oktató adatait egy sorban, pontosvesszővel (;) elválasztva. \n");
     printf("A bevitelt a következő formátumban várjuk (max %d csoportkóddal):\n", MAX_CSOPORT_SZAM);
     printf(
-        "Format: Nev;Csoport_1;Csoport_2;...;Csoport_%d\n", MAX_CSOPORT_SZAM);
-    printf(
-        "Ha egy csoportkód nem releváns, írjon be helyette egy egyedi jelölést (pl. '-').\n");
-    printf(
-        "Adat bevitele után nyomjon Entert. A bevitelt a sor elején lévő Ctrl+D (vagy Ctrl+Z) gombokkal fejezheti be.\n\n");
+        "Format: Nev;Csoport_1;Csoport_2;...;Csoport_%d (nem relevánsra írjon be '-'-t)\n", MAX_CSOPORT_SZAM);
 
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 
     int result = scanf(
         " %50[^;];"
-
         "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];"
         "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]",
 
@@ -374,15 +336,14 @@ Teacher *createNewTeacherInstance(Teacher *newTeacher) {
         return NULL;
     }
 
+    while ((c = getchar()) != '\n' && c != EOF);
+
     if (result != expected_items) {
         fprintf(
             stderr,
-            "Error: Csak %d mezőt sikerült beolvasni a %d-ből. Ellenőrizze a pontosvesszőket és a formátumot!\n",
+            "Hiba: Csak %d mezőt sikerült beolvasni a %d-ből. Ellenőrizze a pontosvesszőket és a formátumot!\n",
             result,
             expected_items);
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-        waitForEnter();
         return NULL;
     }
 
@@ -417,43 +378,72 @@ Teacher *addNewTeacher(Teacher *teacherListPtr, Teacher *newTeacher) {
     return teacherListPtr;
 }
 
-void mainLoopForAddNewStudent(Student *studentListPtr) {
+void mainLoopForAddNewStudent(Student **studentListHead) {
     Student *newStudent = NULL;
-    Student *result = NULL;
 
     newStudent = (Student *) malloc(sizeof(Student));
     if (newStudent == NULL) {
-        perror("Hiba: Memória foglalás sikertelen!\n");
+        perror("Hiba: Memória foglalás sikertelen");
         waitForEnter();
         return;
     }
 
-    newStudent = createNewStudentInstance(newStudent);
-
-    if (newStudent == NULL) {
-        perror("Hiba: Sikertelen adatbevitel vagy művelet!\n");
+    if (createNewStudentInstance(newStudent) == NULL) {
+        fprintf(stderr, "Hiba: Sikertelen adatbevitel vagy művelet!\n");
         waitForEnter();
         free(newStudent);
         return;
     }
 
-    result = addNewStudent(studentListPtr, newStudent);
+    Student *newHead = addNewStudent(*studentListHead, newStudent);
 
-    if (result != NULL) {
+    if (newHead != NULL) {
+        *studentListHead = newHead;
         printf("Sikerült hozzáadni az új tanulót!\n");
     } else {
-        perror("Hiba: Nem sikerült hozzáadni az új hallgatót a listához!\n");
+        fprintf(stderr, "Hiba: Nem sikerült hozzáadni az új hallgatót a listához!\n");
         free(newStudent);
     }
     waitForEnter();
 }
 
+void mainLoopForAddNewTeacher(Teacher **teacherListHead) {
+    Teacher *newTeacher = NULL;
+
+    newTeacher = (Teacher *) malloc(sizeof(Teacher));
+    if (newTeacher == NULL) {
+        perror("Hiba: Memória foglalás sikertelen (oktató)!");
+        waitForEnter();
+        return;
+    }
+
+    if (createNewTeacherInstance(newTeacher) == NULL) {
+        fprintf(stderr, "Hiba: Sikertelen adatbevitel vagy művelet!\n");
+        waitForEnter();
+        free(newTeacher);
+        return;
+    }
+
+    Teacher *newHead = addNewTeacher(*teacherListHead, newTeacher);
+
+    if (newHead != NULL) {
+        *teacherListHead = newHead;
+        printf("Sikerült hozzáadni az új oktatót!\n");
+    } else {
+        fprintf(stderr, "Hiba: Nem sikerült hozzáadni az új oktatót a listához!\n");
+        free(newTeacher);
+    }
+    waitForEnter();
+}
+
+
+
 int updateStudent(Student *studentListPtr) {
     int indexOfStudentToUpdate;
-    printf("Kerem, adja meg a frissiteni kivant diak indexet (0-tol kezdve): ");
+    printf("Kérem, adja meg a frissíteni kívánt diák indexét (0-tól kezdve): ");
 
     if (scanf("%d", &indexOfStudentToUpdate) != 1 || indexOfStudentToUpdate < 0) {
-        perror("HIBA: Ervenytelen index lett megadva!");
+        fprintf(stderr, "HIBA: Érvénytelen index lett megadva!\n");
         while (getchar() != '\n');
         return -3;
     }
@@ -461,7 +451,6 @@ int updateStudent(Student *studentListPtr) {
 
     Student *selectedStudent = NULL;
     Student *current = studentListPtr;
-
 
     for (int i = 0; current != NULL; i++) {
         if (i == indexOfStudentToUpdate) {
@@ -472,7 +461,7 @@ int updateStudent(Student *studentListPtr) {
     }
 
     if (selectedStudent == NULL) {
-        perror("HIBA: A valasztott diak nem letezik (ervenytelen index vagy lista vege)!");
+        fprintf(stderr, "HIBA: A választott diák nem létezik (érvénytelen index vagy lista vége)!\n");
         return -1;
     }
 
@@ -490,50 +479,50 @@ int updateStudent(Student *studentListPtr) {
     printf("  Vizsga pont: %.2f\n", selectedStudent->vizsga_pont);
     printf("------------------------\n");
 
-    printf("\nKerem, adja meg az uj adatokat, minden adatot uj sorba irjon!\n");
+    printf("\nKérem, adja meg az új adatokat, minden adatot új sorba írjon!\n");
 
-    printf("1. Diak neve (max %d karakter):\n", MAX_NEV_HOSSZ);
+    printf("1. Diák neve (max %d karakter):\n", MAX_NEV_HOSSZ);
     if (fgets(selectedStudent->nev, MAX_NEV_HOSSZ + 1, stdin) == NULL) {
-        perror("HIBA: Nev beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Név beolvasási hiba!\n");
         return -2;
     }
-    selectedStudent->nev[strcspn(selectedStudent->nev, "\n")] = 0; // Sorvégi karakter eltávolítása
+    selectedStudent->nev[strcspn(selectedStudent->nev, "\n")] = 0;
 
-    printf("2. Neptun kod (max %d karakter):\n", NEPTUN_HOSSZ);
+    printf("2. Neptun kód (max %d karakter):\n", NEPTUN_HOSSZ);
     if (fgets(selectedStudent->neptun_kod, NEPTUN_HOSSZ + 1, stdin) == NULL) {
-        perror("HIBA: Neptun kod beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Neptun kód beolvasási hiba!\n");
         return -2;
     }
     selectedStudent->neptun_kod[strcspn(selectedStudent->neptun_kod, "\n")] = 0;
 
-    printf("3. Eloadas csoport szama (egesz szam):\n");
+    printf("3. Előadás csoport száma (egész szám):\n");
     if (scanf("%d", &selectedStudent->elo_csoport) != 1) {
-        perror("HIBA: Eloadas csoport beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Előadás csoport beolvasási hiba!\n");
         while (getchar() != '\n');
         return -2;
     }
     while (getchar() != '\n');
 
-    printf("4. Gyakorlati csoport kodja (max %d karakter):\n", 10 - 1);
+    printf("4. Gyakorlati csoport kódja (max %d karakter):\n", 9);
     if (fgets(selectedStudent->gyak_csoport, 10, stdin) == NULL) {
-        perror("HIBA: Gyakorlati csoport beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Gyakorlati csoport beolvasási hiba!\n");
         return -2;
     }
     selectedStudent->gyak_csoport[strcspn(selectedStudent->gyak_csoport, "\n")] = 0;
 
-    printf("5. Hianyzasok szama (egesz szam):\n");
+    printf("5. Hiányzások száma (egész szám):\n");
     if (scanf("%d", &selectedStudent->hianyzasok_szama) != 1) {
-        perror("HIBA: Hianyzasok szama beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Hiányzások száma beolvasási hiba!\n");
         while (getchar() != '\n');
         return -2;
     }
     while (getchar() != '\n');
 
-    printf("6. Kis ZH pontok (%d db, egyenkent kulon sorba):\n", MAX_ZH_SZAM);
+    printf("6. Kis ZH pontok (%d db, egyenként külön sorba):\n", MAX_ZH_SZAM);
     for (int i = 0; i < MAX_ZH_SZAM; i++) {
         printf("   Kis ZH %d. pont:\n", i + 1);
         if (scanf("%lf", &selectedStudent->kis_zh_pontok[i]) != 1) {
-            perror("HIBA: Kis ZH pont beolvasasi hiba!");
+            fprintf(stderr, "HIBA: Kis ZH pont beolvasási hiba!\n");
             while (getchar() != '\n');
             return -2;
         }
@@ -542,7 +531,7 @@ int updateStudent(Student *studentListPtr) {
 
     printf("11. Nagy ZH pont:\n");
     if (scanf("%lf", &selectedStudent->nzh_pont) != 1) {
-        perror("HIBA: Nagy ZH pont beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Nagy ZH pont beolvasási hiba!\n");
         while (getchar() != '\n');
         return -2;
     }
@@ -550,23 +539,23 @@ int updateStudent(Student *studentListPtr) {
 
     printf("12. Vizsga pont:\n");
     if (scanf("%lf", &selectedStudent->vizsga_pont) != 1) {
-        perror("HIBA: Vizsga pont beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Vizsga pont beolvasási hiba!\n");
         while (getchar() != '\n');
         return -2;
     }
     while (getchar() != '\n');
 
 
-    printf("\nSIKER: A diak adatai sikeresen frissultek!\n");
+    printf("\nSIKER: A diák adatai sikeresen frissültek!\n");
     return 1;
 }
 
 int updateTeacher(Teacher *teacherListPtr) {
     int indexOfTeacherToUpdate;
-    printf("Kerem, adja meg a frissiteni kivant oktato indexet (0-tol kezdve): ");
+    printf("Kérem, adja meg a frissíteni kívánt oktató indexét (0-tól kezdve): ");
 
     if (scanf("%d", &indexOfTeacherToUpdate) != 1 || indexOfTeacherToUpdate < 0) {
-        perror("HIBA: Ervenytelen index lett megadva!");
+        fprintf(stderr, "HIBA: Érvénytelen index lett megadva!\n");
         while (getchar() != '\n');
         return -3;
     }
@@ -574,7 +563,6 @@ int updateTeacher(Teacher *teacherListPtr) {
 
     Teacher *selectedTeacher = NULL;
     Teacher *current = teacherListPtr;
-
 
     for (int i = 0; current != NULL; i++) {
         if (i == indexOfTeacherToUpdate) {
@@ -585,35 +573,35 @@ int updateTeacher(Teacher *teacherListPtr) {
     }
 
     if (selectedTeacher == NULL) {
-        perror("HIBA: A valasztott oktato nem letezik (ervenytelen index vagy lista vege)!");
+        fprintf(stderr, "HIBA: A választott oktató nem létezik (érvénytelen index vagy lista vége)!\n");
         return -1;
     }
 
     printf("\n--- Eredeti adatok: ---\n");
-    printf("Nev: %s\n", selectedTeacher->nev);
+    printf("Név: %s\n", selectedTeacher->nev);
     printf("Csoportok szama: %d\n", selectedTeacher->csoportok_szama);
-    printf("Csoportok kodjai: ");
+    printf("Csoportok kódjai: ");
     for (int i = 0; i < selectedTeacher->csoportok_szama; i++) {
         printf("%s%s", selectedTeacher->csoportok[i], (i == selectedTeacher->csoportok_szama - 1) ? "" : ";");
     }
     printf("\n------------------------\n");
 
-    printf("\nKerem, adja meg az uj adatokat. Minden adatot uj sorba irjon!\n");
-    printf("1. Oktato neve (max %d karakter):\n", MAX_OKTATO_NEV);
+    printf("\nKérem, adja meg az új adatokat. Minden adatot új sorba írjon!\n");
+    printf("1. Oktató neve (max %d karakter):\n", MAX_OKTATO_NEV);
 
     if (fgets(selectedTeacher->nev, MAX_OKTATO_NEV + 1, stdin) == NULL) {
-        perror("HIBA: Nev beolvasasi hiba!");
+        fprintf(stderr, "HIBA: Név beolvasási hiba!\n");
         return -2;
     }
     selectedTeacher->nev[strcspn(selectedTeacher->nev, "\n")] = 0;
 
 
-    printf("2. Csoportok szama (max %d):\n", MAX_CSOPORT_SZAM);
+    printf("2. Csoportok száma (max %d):\n", MAX_CSOPORT_SZAM);
     int temp_csoportok_szama;
     int result_count = scanf("%d", &temp_csoportok_szama);
 
     if (result_count != 1 || temp_csoportok_szama < 0 || temp_csoportok_szama > MAX_CSOPORT_SZAM) {
-        perror("HIBA: Ervenytelen csoportszam!");
+        fprintf(stderr, "HIBA: Érvénytelen csoportszám!\n");
         while (getchar() != '\n');
         return -2;
     }
@@ -622,39 +610,43 @@ int updateTeacher(Teacher *teacherListPtr) {
     selectedTeacher->csoportok_szama = temp_csoportok_szama;
 
 
-    printf("3. Csoportok kodjai (kulon sorba, max %d karakter, pl. 'C1_HOSSZ'):\n", CSOPORT_KOD_HOSSZ);
+    printf("3. Csoportok kódjai (külön sorba, max %d karakter, pl. 'G01'):\n", CSOPORT_KOD_HOSSZ);
     for (int i = 0; i < selectedTeacher->csoportok_szama; i++) {
         printf("Csoport %d: ", i);
         if (fgets(selectedTeacher->csoportok[i], CSOPORT_KOD_HOSSZ + 1, stdin) == NULL) {
-            perror("HIBA: Csoportkod beolvasasi hiba!");
+            fprintf(stderr, "HIBA: Csoportkód beolvasási hiba!\n");
             while (getchar() != '\n');
             return -2;
         }
         selectedTeacher->csoportok[i][strcspn(selectedTeacher->csoportok[i], "\n")] = 0;
     }
 
+    for (int i = selectedTeacher->csoportok_szama; i < MAX_CSOPORT_SZAM; i++) {
+        selectedTeacher->csoportok[i][0] = '\0';
+    }
 
-    printf("\nSIKER: Az oktato adatai sikeresen frissultek!\n");
+
+    printf("\nSIKER: Az oktató adatai sikeresen frissültek!\n");
     return 1;
 }
 
-int deleteStudent(Student *headRef) {
-    if (headRef == NULL) {
-        perror("HIBA: A diaklista ures, nincs mit torolni.");
+int deleteStudent(Student **studentListHead) {
+    if (*studentListHead == NULL) {
+        fprintf(stderr, "HIBA: A diáklista üres, nincs mit törölni.\n");
         return -4;
     }
 
     int indexOfStudentToDelete;
-    printf("\nKerem, adja meg a torolni kivant diak indexet (0-tol kezdve): ");
+    printf("\nKérem, adja meg a törölni kívánt diák indexét (0-tól kezdve): ");
 
     if (scanf("%d", &indexOfStudentToDelete) != 1 || indexOfStudentToDelete < 0) {
-        perror("HIBA: Ervenytelen index lett megadva!");
+        fprintf(stderr, "HIBA: Érvénytelen index lett megadva!\n");
         while (getchar() != '\n');
         return -3;
     }
     while (getchar() != '\n');
 
-    Student *current = headRef;
+    Student *current = *studentListHead;
     Student *prev = NULL;
     int i = 0;
 
@@ -665,38 +657,38 @@ int deleteStudent(Student *headRef) {
     }
 
     if (current == NULL) {
-        perror("HIBA: A valasztott index nem letezik a listaban!");
+        fprintf(stderr, "HIBA: A választott index nem létezik a listában!\n");
         return -1;
     }
 
     if (prev == NULL) {
-        headRef = current->next;
+        *studentListHead = current->next;
     } else {
         prev->next = current->next;
     }
 
-    printf("SIKER: A diak (%s) a(z) %d. indexen sikeresen torolve.\n", current->nev, indexOfStudentToDelete);
+    printf("SIKER: A diák (%s) a(z) %d. indexen sikeresen törölve.\n", current->nev, indexOfStudentToDelete);
     free(current);
     return 1;
 }
 
-int deleteTeacher(Teacher *headRef) {
-    if (headRef == NULL) {
-        perror("HIBA: Az oktatolista ures, nincs mit torolni.");
+int deleteTeacher(Teacher **teacherListHead) {
+    if (*teacherListHead == NULL) {
+        fprintf(stderr, "HIBA: Az oktatólista üres, nincs mit törölni.\n");
         return -4;
     }
 
     int indexOfTeacherToDelete;
-    printf("\nKerem, adja meg a torolni kivant oktato indexet (0-tol kezdve): ");
+    printf("\nKérem, adja meg a törölni kívánt oktató indexét (0-tól kezdve): ");
 
     if (scanf("%d", &indexOfTeacherToDelete) != 1 || indexOfTeacherToDelete < 0) {
-        perror("HIBA: Ervenytelen index lett megadva!");
+        fprintf(stderr, "HIBA: Érvénytelen index lett megadva!\n");
         while (getchar() != '\n');
         return -3;
     }
     while (getchar() != '\n');
 
-    Teacher *current = headRef;
+    Teacher *current = *teacherListHead;
     Teacher *prev = NULL;
     int i = 0;
 
@@ -707,75 +699,37 @@ int deleteTeacher(Teacher *headRef) {
     }
 
     if (current == NULL) {
-        perror("HIBA: A valasztott index nem letezik a listaban!");
+        fprintf(stderr, "HIBA: A választott index nem létezik a listában!\n");
         return -1;
     }
 
     if (prev == NULL) {
-        headRef = current->next;
+        *teacherListHead = current->next;
     } else {
         prev->next = current->next;
     }
 
-    printf("SIKER: Az oktato (%s) a(z) %d. indexen sikeresen torolve.\n", current->nev, indexOfTeacherToDelete);
+    printf("SIKER: Az oktató (%s) a(z) %d. indexen sikeresen törölve.\n", current->nev, indexOfTeacherToDelete);
     free(current);
     return 1;
 }
 
 
-void mainLoopForAddNewTeacher(Teacher *teacherListPtr) {
-    Teacher *newTeacher = NULL;
-
-    newTeacher = (Teacher *) malloc(sizeof(Teacher));
-    if (newTeacher == NULL) {
-        perror("Hiba: Memória foglalás sikertelen (oktató)!\n");
-        waitForEnter();
-        return;
-    }
-
-    newTeacher = createNewTeacherInstance(newTeacher);
-
-    if (newTeacher == NULL) {
-        perror("Hiba: Sikertelen adatbevitel vagy művelet!\n");
-        waitForEnter();
-        free(newTeacher);
-        return;
-    }
-
-
-    teacherListPtr = addNewTeacher(teacherListPtr, newTeacher);
-
-    if (teacherListPtr != NULL) {
-        printf("Sikerült hozzáadni az új oktatót!\n");
-    } else {
-        perror("Hiba: Sikertelen hozzáadás a listához (lista fej NULL)!\n");
-    }
-
-    waitForEnter();
-}
-
-
-void mainLoopForUpdateMenu(Student *studentList, Teacher *teacherList) {
+void mainLoopForCreateMenu(Student **studentListHead, Teacher **teacherListHead) {
     int userInput;
+
     do {
         clear_screen();
-        displayDataManagementMenu();
+        displayNewDataMenu();
         scanf("%i", &userInput);
         switch (userInput) {
-            // Add update student
             case 1:
-                updateStudent(studentList);
+                mainLoopForAddNewStudent(studentListHead);
                 break;
-            // Add update teacher
             case 2:
-                updateTeacher(teacherList);
+                mainLoopForAddNewTeacher(teacherListHead);
                 break;
-            case 3:
-                deleteStudent(studentList);
-                break;
-            case 4:
-                deleteTeacher(teacherList);
-                break;
+
             case 9:
                 break;
             default:
@@ -785,23 +739,25 @@ void mainLoopForUpdateMenu(Student *studentList, Teacher *teacherList) {
     } while (userInput != 9);
 }
 
-void mainLoopForCreateMenu(Student *studentList, Teacher *teacherList) {
+void mainLoopForUpdateMenu(Student **studentListHead, Teacher **teacherListHead) {
     int userInput;
-
     do {
         clear_screen();
-        displayNewDataMenu();
+        displayDataManagementMenu();
         scanf("%i", &userInput);
         switch (userInput) {
-            // Add new student
             case 1:
-                mainLoopForAddNewStudent(studentList);
+                updateStudent(*studentListHead);
                 break;
-            // Add new teacher
             case 2:
-                mainLoopForAddNewTeacher(teacherList);
+                updateTeacher(*teacherListHead);
                 break;
-
+            case 3:
+                deleteStudent(studentListHead);
+                break;
+            case 4:
+                deleteTeacher(teacherListHead);
+                break;
             case 9:
                 break;
             default:
@@ -827,11 +783,14 @@ void mainLoopForListMenu(Student *studentList, Teacher *teacherList) {
             case 13:
                 listAllStudentsByGroup(studentList);
                 break;
-            case 14:listAllStudentsByNZH(studentList);
+            case 14:
+                listAllStudentsByNZH(studentList);
                 break;
-            case 15:listAllStudentsByKZH(studentList);
+            case 15:
+                listAllStudentsByKZH(studentList);
                 break;
-            case 16:listAllStudentsByNEPTUN(studentList);
+            case 16:
+                listAllStudentsByNEPTUN(studentList);
                 break;
             case 21:
                 listAllStudentsByRetake(studentList);
@@ -841,4 +800,3 @@ void mainLoopForListMenu(Student *studentList, Teacher *teacherList) {
         }
     } while (userInput != 9);
 }
-
