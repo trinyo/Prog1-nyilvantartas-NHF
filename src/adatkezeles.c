@@ -2,13 +2,14 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "../include/adatkezeles.h"
 
 #include <stdlib.h>
 
-#include "../include/menuElemek.h"
+#include "../include/adatkezeles.h"
 #include "../include/strukturak.h"
+#include "../include/menuElemek.h"
 
+// sum-er func
 double calculateTotalScore(const Student *student_ptr) {
     double total = 0.0;
     // Sums up the points from the small tests (kis zh)
@@ -22,25 +23,25 @@ double calculateTotalScore(const Student *student_ptr) {
     return total;
 }
 
-Student *sortStudentListByPointsDescending(Student *head) { return NULL; }
 
-void calculateGrade(double totalScore, char *resultBuffer) {
+void calculateGrade(double totalScore, char *result) {
     if (totalScore >= 119.0) {
-        strcpy(resultBuffer, "Jeles (5)");
+        strcpy(result, "Jeles (5)");
     } else if (totalScore >= 98.0) {
-        strcpy(resultBuffer, "Jó (4)");
+        strcpy(result, "Jó (4)");
     } else if (totalScore >= 77.0) {
-        strcpy(resultBuffer, "Közepes (3)");
+        strcpy(result, "Közepes (3)");
     } else if (totalScore >= 56.0) {
-        strcpy(resultBuffer, "Elégséges (2)");
+        strcpy(result, "Elégséges (2)");
     } else {
-        strcpy(resultBuffer, "Elégtelen (1)");
+        strcpy(result, "Elégtelen (1)");
     }
 }
 
 void listAllStudents(Student *head) {
     if (head == NULL) {
         perror("The list is empty!");
+        waitForEnter();
         return;
     }
     clear_screen();
@@ -77,7 +78,8 @@ void listAllStudents(Student *head) {
 
 void listAllTeachers(Teacher *head) {
     if (head == NULL) {
-        printf("\nA tanári lista üres.\n");
+        perror("The list is empty!");
+        waitForEnter();
         return;
     }
     clear_screen();
@@ -123,6 +125,7 @@ void listAllTeachers(Teacher *head) {
 void listAllStudentsByGroup(Student *head) {
     if (head == NULL) {
         perror("The list is empty!");
+        waitForEnter();
         return;
     }
 
@@ -145,9 +148,92 @@ void listAllStudentsByGroup(Student *head) {
     waitForEnter();
 }
 
+
+void listAllStudentsByNZH(Student *head) {
+    if (head == NULL) {
+        perror("The list is empty!");
+        return;
+    }
+
+    printf("\n--- TANULÓ NYILVÁNTARTÁS NZH ALAPJÁN ---\n");
+
+    printf("| %-30s | %-10s | \n", "Név", "NZH Pontszám");
+    printf("---------------------------------------------------------------------"
+        "---\n");
+
+    Student *current = head;
+
+    while (current != NULL) {
+        printf("| %-30s | %-30f \n", current->nev, current->nzh_pont);
+
+        current = current->next;
+    }
+
+    printf("--------------------------------------------------\n");
+    waitForEnter();
+}
+
+void listAllStudentsByKZH(Student *head) {
+    if (head == NULL) {
+        perror("The list is empty!");
+        return;
+    }
+
+    printf("\n--- TANULÓ NYILVÁNTARTÁS KZH ALAPJÁN ---\n");
+
+    printf("| %-30s | %-50s | \n", "Név", "KZH Pontszámok");
+    printf("---------------------------------------------------------------------"
+        "---\n");
+
+    Student *current = head;
+
+    while (current != NULL) {
+        printf("| %-30s | %-10f | %-10f | %-10f | %-10f | %-10f \n",
+            current->nev,
+            current->kis_zh_pontok[0],
+            current->kis_zh_pontok[1],
+            current->kis_zh_pontok[2],
+            current->kis_zh_pontok[3],
+            current->kis_zh_pontok[4]);
+        current = current->next;
+    }
+
+    printf("--------------------------------------------------\n");
+    waitForEnter();
+}
+
+
+void listAllStudentsByNEPTUN(Student *head) {
+    if (head == NULL) {
+        perror("The list is empty!");
+        waitForEnter();
+        return;
+    }
+
+    printf("\n--- TANULÓ NYILVÁNTARTÁS NEPTUN KÓD ALAPJÁN ---\n");
+
+    printf("| %-30s | %-50s | \n", "Név", "NEPTUN Kód");
+    printf("---------------------------------------------------------------------"
+        "---\n");
+
+    Student *current = head;
+
+    while (current != NULL) {
+        printf("| %-30s | %-10s \n",
+            current->nev,
+            current->neptun_kod);
+        current = current->next;
+    }
+
+    printf("--------------------------------------------------\n");
+    waitForEnter();
+}
+
+
 void listAllStudentsByRetake(Student *head) {
     if (head == NULL) {
         perror("The list is empty!");
+        waitForEnter();
         return;
     }
     clear_screen();
@@ -741,15 +827,14 @@ void mainLoopForListMenu(Student *studentList, Teacher *teacherList) {
             case 13:
                 listAllStudentsByGroup(studentList);
                 break;
+            case 14:listAllStudentsByNZH(studentList);
+                break;
+            case 15:listAllStudentsByKZH(studentList);
+                break;
+            case 16:listAllStudentsByNEPTUN(studentList);
+                break;
             case 21:
                 listAllStudentsByRetake(studentList);
-                break;
-            case 31:
-                // listAllStudentsByPointsDescending(studentList);
-                break;
-            case 32:
-                break;
-            case 33:
                 break;
             default:
                 break;

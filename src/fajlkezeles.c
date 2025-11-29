@@ -1,23 +1,24 @@
 #include "../include/menuElemek.h"
 #include "../include/strukturak.h"
+#include "../include/fajlkezeles.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#define STUDENT_FILE_PATH "./data/students.csv"
-#define TEACHER_FILE_PATH "./data/teachers.csv"
+#define STUDENT_FILE_PATH "students.csv"
+#define TEACHER_FILE_PATH "teachers.csv"
 
 Student *readStudentFileAndCreateStudentList() {
 
   // read students file
-  FILE *studentsFile = fopen("./data/students.csv", "r");
+  FILE *studentsFile = fopen("students.csv", "a+");
 
   // check if it succeded
   if (studentsFile == NULL) {
-    perror("The Student file dosent exist!");
-    printf("The Student file dosent exist!");
-    waitForEnter();
+      perror("Failed to open or create the Student file!");
+      printf("Failed to open or create the Student file!");
+      waitForEnter();
     return NULL;
   }
 
@@ -108,6 +109,7 @@ Student *readStudentFileAndCreateStudentList() {
 
   return previousStudent;
 }
+// helper function for reading data
 void trimNewline(char *str) {
     if (str == NULL) return;
     size_t len = strlen(str);
@@ -123,17 +125,13 @@ void trimNewline(char *str) {
 Teacher *readTeacherFileAndCreateTeacherList() {
 
   // read teachers file
-  FILE *teachersFile = fopen("./data/teachers.csv", "r");
+  FILE *teachersFile = fopen("teachers.csv", "a+");
 
   // check if it succeded
   if (teachersFile == NULL) {
-    perror("The Student file dosent exist!");
-
-    printf("Press Enter to continue...");
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-      getchar();
-
+        perror("Failed to open or create the Teacher file!");
+        printf("Failed to open or create the Teacher file!");
+        waitForEnter();
     return NULL;
   }
 
@@ -274,7 +272,7 @@ void saveTeachersToFile(Teacher *head) {
 
     Teacher *current = head;
     while (current != NULL) {
-        // Név
+        // Nev
         fprintf(file, "%s", current->nev);
 
         // Csoportok

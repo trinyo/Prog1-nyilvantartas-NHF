@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "../include/menuElemek.h"
+
 void displayMainMenu() {
   printf("==========================================\n");
   printf("|       HALLGATÓI NYILVÁNTARTÁS          |\n");
@@ -27,15 +30,13 @@ void displayListMenu() {
   printf("[11] Összes hallgatói rekord listázása\n");
   printf("[12] Összes oktatói rekord listázása\n");
   printf("[13] Hallgatók listázása csoport szerint (pl. G01)\n");
+  printf("[14] Hallgatók listázása NZH szerint \n");
+  printf("[15] Hallgatók listázása KZH szerint \n");
+  printf("[16] Hallgatók listázása NEPTUN szerint \n");
 
   printf("\n--- SZŰRÉS ÉS PÓTLÁS ---\n");
   printf("[21] PZH-ra kötelezett hallgatók listája (Pót-ZH)\n");
 
-  printf("\n--- RANGSOROLÁS ÉS STATISZTIKA ---\n");
-  printf(
-      "[31] Hallgatói rangsor (Összpontszám szerint, csökkenő sorrendben)\n");
-  printf("[32] Legtöbbet hiányzó hallgatók listája\n");
-  printf("[33] Csoportok összehasonlítása (Átlagpontszám szerint)\n");
 
   printf("------------------------------------------\n");
   printf("[9]  Vissza a főmenübe\n\n");

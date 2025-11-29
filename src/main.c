@@ -13,11 +13,15 @@
 int main(int argc, char *argv[]) {
   int userInput;
   Student *studentsList = readStudentFileAndCreateStudentList();
-  if (studentsList == NULL)
-    return 1;
+  if (studentsList == NULL) {
+   printf("Warning: Student data could not be loaded. Starting with an empty list.\n");
+    waitForEnter();
+  }
   Teacher *teacherList = readTeacherFileAndCreateTeacherList();
-  if (teacherList == NULL)
-    return 1;
+  if (teacherList == NULL) {
+  printf("Warning: Teacher data could not be loaded. Starting with an empty list.\n");
+    waitForEnter();
+  }
   do {
     clear_screen();
     displayMainMenu();

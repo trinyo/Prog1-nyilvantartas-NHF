@@ -1,6 +1,6 @@
-
 #ifndef MENUELEMEK_H
 #define MENUELEMEK_H
+// functions for displaying every menu
 void displayMainMenu();
 void displayListMenu();
 void displayNewDataMenu();
