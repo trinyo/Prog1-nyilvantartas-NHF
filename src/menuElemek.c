@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "../include/menuElemek.h"
+#include "debugmalloc.h"
 
 void displayMainMenu() {
   printf("==========================================\n");

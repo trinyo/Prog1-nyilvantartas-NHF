@@ -1,6 +1,7 @@
 #include "../include/menuElemek.h"
 #include "../include/strukturak.h"
 #include "../include/fajlkezeles.h"
+#include "debugmalloc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

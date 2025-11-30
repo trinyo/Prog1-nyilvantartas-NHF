@@ -5,6 +5,7 @@
 #include "../include/adatkezeles.h"
 #include "../include/strukturak.h"
 #include "../include/menuElemek.h"
+#include "debugmalloc.h"
 
 
 
@@ -232,23 +233,7 @@ Student *createNewStudentInstance(Student *newStudent) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
-    int result = scanf(
-        // 1. Nev, Neptun_kod (Strings with semicolon delimiter)
-        " %50[^;];%6[^;];"
-
-        // 2. Eloadas_csoport, Gyakorlati_csoport (Integer and String)
-        "%d;%9[^;];"
-
-        // 3. Hianyzasok (Integer)
-        "%d;"
-
-        // 4. 5x ZH scores (Doubles with semicolon delimiter)
-        "%lf;%lf;%lf;%lf;%lf;"
-
-        // 5. NZH_pont, Vizsga_pont (Doubles)
-        "%lf;%lf",
-
-        // --- Corresponding Variables ---
+    int result = scanf(" %50[^;];%6[^;];""%d;%9[^;];""%d;""%lf;%lf;%lf;%lf;%lf;""%lf;%lf",
         newStudent->nev,
         newStudent->neptun_kod,
         &newStudent->elo_csoport,
@@ -312,11 +297,7 @@ Teacher *createNewTeacherInstance(Teacher *newTeacher) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
-    int result = scanf(
-        " %50[^;];"
-        "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];"
-        "%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]",
-
+    int result = scanf(" %50[^;];""%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];""%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]",
         newTeacher->nev,
         newTeacher->csoportok[0],
         newTeacher->csoportok[1],
@@ -669,6 +650,7 @@ int deleteStudent(Student **studentListHead) {
 
     printf("SIKER: A diák (%s) a(z) %d. indexen sikeresen törölve.\n", current->nev, indexOfStudentToDelete);
     free(current);
+    waitForEnter();
     return 1;
 }
 
@@ -711,6 +693,7 @@ int deleteTeacher(Teacher **teacherListHead) {
 
     printf("SIKER: Az oktató (%s) a(z) %d. indexen sikeresen törölve.\n", current->nev, indexOfTeacherToDelete);
     free(current);
+    waitForEnter();
     return 1;
 }
 
